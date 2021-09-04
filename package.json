@@ -1,29 +1,27 @@
 {
-  "name": "Employee-Tracker",
+  "name": "employee-tracker",
   "version": "1.0.0",
   "description": "Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. These interfaces are known as Content Management Systems (CMS). Your challenge this week is to build a command-line application to manage a company's database of employees using Node.js, Inquirer, and MySQL.",
   "main": "server.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "express": "^4.17.1",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.3.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
-    "dev": "nodemon server"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mejialaguna/Employee-Tracker.git"
   },
-  "keywords": [],
-  "author": "",
+  "author": "JLML",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mejialaguna/Employee-Tracker/issues"
   },
-  "homepage": "https://github.com/mejialaguna/Employee-Tracker#readme",
-  "dependencies": {
-    "console.table": "^0.10.0",
-    "express": "^4.17.1",
-    "inquirer": "^8.1.2",
-    "mysql2": "^2.3.0",
-    "nodemon": "^2.0.12"
-  }
+  "homepage": "https://github.com/mejialaguna/Employee-Tracker#readme"
 }
