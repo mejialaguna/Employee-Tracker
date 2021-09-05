@@ -9,85 +9,49 @@ function todoList() {
         name: "todo",
         message: "Hello there , What would you like to do",
         choices: [
-          "add an employee",
+          "add employee",
           "view all employees",
           "view all employees by manager",
           "view all employee by department",
-          "update employee role",
+          "update role",
           "update employee manager",
           "delete employee",
           "delete department",
           "delete role",
           "exit",
-        ],
-      },
+        ]
+      }
     ])
     .then((answer) => {
-      console.log(answer);
-      if (answer.todo === "add an employee") {
+      if (answer.todo === "add employee") {
         addEmployee();
-      } else if( answer.todo === "view all employees"){
-        allEmployees()
-      } else if (answer.todo === "view all employee by department"){
-        department()
-      } else if( answer.todo === "view all employees by manager"){
-        manager()
-      } else if ( answer.todo === "update employee by role"){
-        updateRole()
-      } else if (answer.todo === "update employee manager"){
-        updateManager()
-      } else if (answer.todo === "delete employee"){
-        deleteEmployee()
-      } else if (answer.todo === "delete department"){
-        deleteRole()
-      } else{}
-      
-        });
+      } else if (answer.todo === "view all employees") {
+        allEmployees();
+      } else if (answer.todo === "view all employee by department") {
+        department();
+      } else if (answer.todo === "view all employees by manager") {
+        manager();
+      } else if (answer.todo === "update role") {
+        updateRole();
+      } else if (answer.todo === "update employee manager") {
+        updateManager();
+      } else if (answer.todo === "delete employee") {
+        deleteEmployee();
+      } else if (answer.todo === "delete department") {
+        deleteDepartment()
+      } else if (answer.todo === "delete role"){
+        deleteRole();
       }
-      // else{todo()}
-
-
-// TO GET ALL EMPLOYEES 
-function allEmployees(){
-const sql = `SELECT * FROM employee
-  LEFT JOIN
-  roles ON employee.role_id = roles.id
-  JOIN department
-  ON department.id = roles.dep_id;
-`
-connection.query(sql , (err , rows) => {
-  if (err){
-    throw err;
-  }
-  console.table(rows);
-  
-})
-todoList()
+      console.log(answer);
+    });
 }
 
-// to get EMPLOYEE BY department
-function department(){
-  const sql = `SELECT employee.first_name, employee.last_name ,roles.dep_id , department.dep_name
-  FROM roles
-  JOIN department
-  ON roles.dep_id = department.id
-  JOIN employee
-  ON employee.role_id = roles.id;`
-  connection.query( sql , (err, result) => {
-    if (err) {
-      throw err;
-    }
-    console.table(result);
-  })
-  todo()
-}
-
-
+// to add an employee
 function addEmployee() {
   inquirer
     .prompt([
       {
-        message: "First Name",
+        message: "Employee First Name",
         type: "input",
         name: "firstName",
         validate: (nameInput) => {
@@ -100,7 +64,7 @@ function addEmployee() {
         },
       },
       {
-        message: "Last Name",
+        message: "Employee Last Name",
         type: "input",
         name: "LastName",
         validate: (nameInput) => {
@@ -113,14 +77,14 @@ function addEmployee() {
         },
       },
       {
-        message: " Role id number",
+        message: "Role id number",
         type: "input",
         name: "roleId",
         validate: (nameInput) => {
           if (nameInput) {
             return true;
           } else {
-            return null;
+            return false;
           }
         },
       },
@@ -132,7 +96,7 @@ function addEmployee() {
           if (nameInput) {
             return true;
           } else {
-            return null;
+            return false;
           }
         },
       },
@@ -141,20 +105,147 @@ function addEmployee() {
       console.log(answer);
       const sql = `INSERT INTO roles (first_name , last_name , role_id , manager_id)
     VALUES (? , ?, ? ,?)`;
-    const params = [answer.firstName ,answer.lastName, answer.roleId ,answer.managerId ];
-      connection.query(sql, params , (err, result) => {
-        if(err){
+      const params = [
+        answer.firstName,
+        answer.lastName,
+        answer.roleId,
+        answer.managerId,
+      ];
+      connection.query(sql, params, (err, result) => {
+        if (err) {
           throw err;
-        } 
+        }
         console.table(result);
+        todoList();
       });
     });
-    
 }
 
+// TO GET ALL EMPLOYEES
+function allEmployees() {
+  const sql = `SELECT * FROM employee
+  LEFT JOIN
+  roles ON employee.role_id = roles.id
+  JOIN department
+  ON department.id = roles.dep_id;
+`;
+  connection.query(sql, (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    console.table(rows);
+    todoList();
+  });
+}
 
+// to get EMPLOYEE BY department
+function department() {
+  const sql = `SELECT employee.first_name, employee.last_name ,roles.dep_id , department.dep_name
+  FROM roles
+  JOIN department
+  ON roles.dep_id = department.id
+  JOIN employee
+  ON employee.role_id = roles.id;`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      throw err;
+    }
+    console.table(result);
+  });
+  todoList();
+}
 
-// function updateRole(){
+function updateRole() {
+  inquirer
+    .prompt([
+      {
+        message: "employee id number you need to up date",
+        type: "input",
+        name: "emp_id",
+      },
+      {
+        type: "input",
+        message: "enter role id NUMBER",
+        name: "role",
+      },
+    ])
+    .then((answer) => {
+      const sql = `UPDATE employee 
+    SET role_id = ${answer.role}  WHERE id = ${answer.emp_id}`;
+      connection.query(sql, (err, row) => {
+        if (err) {
+          throw err;
+        }
+        console.table(row);
+        todoList();
+      });
+    });
+}
+
+function deleteRole(){
+inquirer
+  .prompt([
+    {
+      type: "input",
+      message: "please add the role id number you would like to delete",
+      name: "deleteRole"
+    }
+  ])
+  .then((answer) => {
+    const sql = 'DELETE FROM roles where id = ?'
+    const params = `${answer.deleteRole}`
+    connection.query( sql , params , (err , result) => {
+      if (err){
+        throw err;
+      }console.log('Role delete')
+      console.table(result)
+    })
+  })
+}
+
+function deleteDepartment(){
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "please type the department name you would like to delete",
+        name: "deleteDepartment"
+      }
+    ]).then((answer) => {
+      const sql = ` DELETE FROM department where dep_name = ?`;
+      const params = `${answer.deleteDepartment}`;
+
+      connection.query(sql , params, (err , result) => {
+        if (err){
+          throw err;
+        }
+        console.log("message deleted");
+        console.table(result)
+      })
+    })
+}
+
+function deleteEmployee(){
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "please type employee id number",
+        name: "deleteEmployee"
+      }
+    ]).then((answer) => {
+      const sql = 'DELETE FROM employee WHERE id = ?';
+      const params = `${answer.deleteEmployee}`
+
+      connection.query(sql, params ,(err ,  result) => {
+        if (err){
+          throw err
+        } console.log("Employee deleted");
+          console.table(result);
+      })      
+    })
+}
+
 
 // connection.query( `SELECT * FROM employees`, (err , employees) =>{
 //   if (err){
@@ -177,23 +268,3 @@ function addEmployee() {
 
 todoList();
 
-// {
-//   type: "list",
-//   message: " whats is the role of your employee",
-//   name: "employeeRole",
-//   choices: ["Engineer" , "Lawyer" , "Seller" , "costumer service", "Finance" ,"Janitor"]
-// },
-// {
-//   type: 'list',
-//   name: "employeeDepartment",
-//   choices: ["Legal" , "Engineering" , "Costumer Rep" , "financing" , "Custodian" , "Sales"]
-// },
-// {
-//  type: "input",
-//  message: "employee salary"
-// },
-// {
-//   type: 'input',
-//   name: "managerName",
-//   message: "employee manager name",
-// }

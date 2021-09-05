@@ -31,6 +31,7 @@ CREATE TABLE employee(
 
 
 
+
 -- to SELECT specific data from the tables 
     -- SELECT employee.first_name, employee.last_name ,roles.dep_id , department.dep_name
     -- -> FROM roles
@@ -48,3 +49,5 @@ CREATE TABLE employee(
     -- -> roles ON employee.role_id = roles.id
     -- -> JOIN department
     -- -> ON department.id = roles.dep_id;
+
+    
