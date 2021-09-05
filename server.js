@@ -155,74 +155,115 @@ function department() {
   todoList();
 }
 
-function deleteRole() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "please add the role id number you would like to delete",
-        name: "deleteRole",
-      },
-    ])
-    .then((answer) => {
-      const sql = "DELETE FROM roles where id = ?";
-      const params = `${answer.deleteRole}`;
-      connection.query(sql, params, (err, result) => {
-        if (err) {
-          throw err;
-        }
-        console.log("Role delete");
-        console.table(result);
-      });
-    });
-}
-
 function deleteDepartment() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "please type the department name you would like to delete",
-        name: "deleteDepartment",
-      },
-    ])
-    .then((answer) => {
-      const sql = ` DELETE FROM department where dep_name = ?`;
-      const params = `${answer.deleteDepartment}`;
+  connection.query(`SELECT * FROM department`, (err, department) => {
+    if (err) {
+      throw err;
+    }
 
-      connection.query(sql, params, (err, result) => {
-        if (err) {
-          throw err;
-        }
-        console.log("message deleted");
-        console.table(result);
+    let departmentChoices = department.map((departments) => {
+      return {
+        name: departments.dep_name
+      }
+    })
+
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: " which department would you like to delete",
+          name: "deleteDepartment",
+          choices: departmentChoices
+        },
+      ])
+      .then((answer) => {
+        const sql = ` DELETE FROM department where dep_name = ?`;
+        const params = `${answer.deleteDepartment}`;
+
+        connection.query(sql, params, (err, result) => {
+          if (err) {
+            throw err;
+          }
+          console.log("department deleted");
+          console.table(result);
+          todoList()
+        });
       });
-    });
+  });
 }
 
 function deleteEmployee() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "please type employee id number",
-        name: "deleteEmployee",
-      },
-    ])
-    .then((answer) => {
-      const sql = "DELETE FROM employee WHERE id = ?";
-      const params = `${answer.deleteEmployee}`;
 
-      connection.query(sql, params, (err, result) => {
-        if (err) {
-          throw err;
-        }
-        console.log("Employee deleted");
-        console.table(result);
-      });
+connection.query(`select * from employee` , (err , employee) => {
+  if (err){
+    throw err
+  }
+
+  let employeeChoices = employee.map((person) => {
+    return {
+      name: `${person.first_name} ${person.last_name}`,
+      value: person.id
+    }
+  })
+  
+  inquirer
+  .prompt([
+    {
+      type: "list",
+      message: "which employee would like to delete",
+      name: "deleteEmployee",
+      choices : employeeChoices,
+    },
+  ])
+  .then((answer) => {
+    const sql = "DELETE FROM employee WHERE id = ?";
+    const params = `${answer.deleteEmployee}`;
+    
+    connection.query(sql, params, (err, result) => {
+      if (err) {
+        throw err;
+      }
+      console.log("Employee deleted");
+      console.table(result);
+      todoList()
     });
+  });
+})
 }
 
+function deleteRole() {
+  connection.query(`SELECT * from roles`, (err, roles) => {
+    if (err) {
+      throw console.error();
+    }
+    let rolesChoices = roles.map((role) => {
+      return {
+        name: role.rol_title
+      };
+    });
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "which department would you like to delete",
+          name: "deleteRole",
+          choices: rolesChoices,
+        },
+      ])
+      .then((answer) => {
+        const sql = "DELETE FROM roles where rol_title = ?";
+        const params = `${answer.deleteRole}`;
+        connection.query(sql, params, (err, result) => {
+          if (err) {
+            throw err;
+          }
+          console.log("Role delete");
+          console.table(result);
+          todoList();
+        });
+      });
+  });
+}
 function updateRole() {
   connection.query(`SELECT * FROM employee`, (err, employees) => {
     if (err) {
@@ -248,16 +289,16 @@ function updateRole() {
       inquirer
         .prompt([
           {
-            message: "employee id number you need to up date",
+            message: "employee name you need to up date",
             type: "list",
             name: "emp_id",
-            choices: employeeChoices
+            choices: employeeChoices,
           },
           {
             type: "list",
-            message: "enter role id NUMBER",
+            message: "choose a new role",
             name: "role_id",
-            choices: rolesChoices
+            choices: rolesChoices,
           },
         ])
         .then((answer) => {
@@ -267,6 +308,7 @@ function updateRole() {
             if (err) {
               throw err;
             }
+            console.log('role updated')
             console.table(row);
             todoList();
           });
