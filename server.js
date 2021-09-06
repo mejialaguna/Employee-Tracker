@@ -1,5 +1,5 @@
 var inquirer = require("inquirer");
-const { query } = require("./db/connection");
+const { addListener } = require("./db/connection");
 const connection = require("./db/connection");
 
 function todoList() {
@@ -13,13 +13,15 @@ function todoList() {
           "add employee",
           "view all employees",
           "view all employees by manager",
+          "add an department",
+          "view all departments",
           "view all employee by department",
+          "view all roles",
           "update role",
           "update employee manager",
           "delete employee",
           "delete department",
           "delete role",
-          "exit",
         ],
       },
     ])
@@ -28,10 +30,16 @@ function todoList() {
         addEmployee();
       } else if (answer.todo === "view all employees") {
         allEmployees();
+      } else if (answer.todo === "add an department")  {
+        addDepartment()
+      } else if (answer.todo === "view all departments") {
+        showDepartments();
       } else if (answer.todo === "view all employee by department") {
         department();
       } else if (answer.todo === "view all employees by manager") {
         manager();
+      } else if (answer.todo === "view all roles") {
+        allRoles();
       } else if (answer.todo === "update role") {
         updateRole();
       } else if (answer.todo === "update employee manager") {
@@ -53,15 +61,16 @@ function addEmployee() {
     if (err) {
       throw error;
     }
-    
-      let rol_title = roles.map((role) => {
-        return {
-          name: role.rol_title,
-          value: role.id,
-        };
-      });
 
-      inquirer.prompt([
+    let rol_title = roles.map((role) => {
+      return {
+        name: role.rol_title,
+        value: role.id,
+      };
+    });
+
+    inquirer
+      .prompt([
         {
           message: "Employee First Name",
           type: "input",
@@ -92,37 +101,102 @@ function addEmployee() {
           message: "assing a role",
           type: "list",
           name: "role_Id",
-          choices: rol_title
+          choices: rol_title,
         },
-      ]).then((answer) => {
-        const sql = `insert into employee (first_name , last_name , role_id) 
-        values ('${answer.first_Name}' , '${answer.last_Name}' , '${answer.role_Id}' )`
-        connection.query(sql , (err, result) => {
-          if (err){
-            throw error
+        {
+          message: 'manager id number',
+          name: "manager_id",
+          type: "input",
+        }
+      ])
+      .then((answer) => {
+        const sql = `insert into employee (first_name , last_name , role_id , manager_id) 
+        values ('${answer.first_Name}' , '${answer.last_Name}' , '${answer.role_Id}' , '${answer.manager_id}' )`;
+        connection.query(sql, (err, result) => {
+          if (err) {
+            throw error;
           }
-          console.log("employee added");
-          console.table(result)
-          todoList()
-        })
-      })
-        
+          console.log(result);
+          allEmployees();
+          todoList();
+        });
+      });
   });
 }
 
 // TO GET ALL EMPLOYEES
 function allEmployees() {
-  const sql = `SELECT * FROM employee
-  LEFT JOIN
-  roles ON employee.role_id = roles.id
-  JOIN department
-  ON department.id = roles.dep_id;
+  const sql = `select concat(first_name, " ", last_name) as Emp_name , dep_id, dep_name as department , salary , manager_id
+   from roles
+   JOIN department
+   on roles.dep_id = department.id
+   join employee
+   on employee.role_id = roles.id;
 `;
   connection.query(sql, (err, rows) => {
     if (err) {
       throw err;
     }
     console.table(rows);
+    todoList();
+  });
+}
+
+function addDepartment(){
+  inquirer
+    .prompt([
+      {
+        message: "Name of department",
+        name: "add_department",
+        type: "input",        
+      },
+      {
+        message: "name of the new role",
+        type: "input",
+        name: "new_role"
+      },
+      {
+        message: "new role salary",
+        type: "input",
+        name: "newSalary"
+      },
+      {
+        message: "department id number",
+        type: "input",
+        name: "dep_id"
+      }
+    ]).then((answer) => {
+      const sql = `insert into department (dep_name)
+      value (?)`;
+      const params = ` ${answer.add_department}`
+      connection.query(sql ,  params , (err , result) => {
+        if(err){
+          throw error
+        }
+        console.table(result)
+        showDepartments()
+        todoList()
+      })
+    }).then((answer) => {
+      const sql = `insert into roles ( rol_title , salary , dep_id) 
+        value( ? ,? ?)`
+      const params = `${answer.new_role} , ${answer.newSalary} , ${answer.dep_id}`
+
+      connection.query(sql , params ,( err , result) =>{
+        if(err){
+          throw error
+        } console.table(result);
+        showDepartments()
+      })
+    })
+}
+function showDepartments() {
+  const sql = ` select * from department`;
+  connection.query(sql, (err, result) => {
+    if (err) {
+      return error;
+    }
+    console.table(result);
     todoList();
   });
 }
@@ -236,6 +310,7 @@ function deleteEmployee() {
           }
           console.log("Employee deleted");
           console.table(result);
+          allEmployees();
           todoList();
         });
       });
@@ -321,6 +396,7 @@ function updateRole() {
             }
             console.log("role updated");
             console.table(row);
+            allEmployees();
             todoList();
           });
         });
@@ -328,72 +404,19 @@ function updateRole() {
   });
 }
 
+function allRoles() {
+  const sql = `select roles.rol_title as JOB_Title , roles.id , department.dep_name as department , salary
+ from roles
+ join department
+ on roles.dep_id = department.id`;
+
+  connection.query(sql, (err, result) => {
+    if (err) {
+      throw error;
+    }
+    console.table(result);
+    todoList();
+  });
+}
+
 todoList();
-
-// inquirer
-//     .prompt([
-//       {
-//         message: "Employee First Name",
-//         type: "input",
-//         name: "first_Name",
-//         validate: (nameInput) => {
-//           if (nameInput) {
-//             return true;
-//           } else {
-//             console.log("please enter your employee First name");
-//             return false;
-//           }
-//         },
-//       },
-//       {
-//         message: "Employee Last Name",
-//         type: "input",
-//         name: "last_Name",
-//         validate: (nameInput) => {
-//           if (nameInput) {
-//             return true;
-//           } else {
-//             console.log("please your employee Last Name");
-//             return false;
-//           }
-//         },
-//       },
-//       {
-//         message: "Role id number",
-//         type: "input",
-//         name: "role_Id",
-//         validate: (nameInput) => {
-//           if (nameInput) {
-//             return true;
-//           } else {
-//             return false;
-//           }
-//         },
-//       },
-//       {
-//         message: "manager id number",
-//         type: "input",
-//         name: "manager_Id",
-//         validate: (nameInput) => {
-//           if (nameInput) {
-//             return true;
-//           } else {
-//             return false;
-//           }
-//         },
-//       },
-//     ])
-//     .then((answer) => {
-//       console.log(answer);
-//       const sql = `INSERT INTO roles (first_name , last_name , role_id , manager_id)
-//     VALUES (${answer.first_Name} , ${answer.last_Name} , ${answer.role_Id}, ${answer.manager_Id})`;
-
-//       connection.query(sql, (err, result) => {
-//         if (err) {
-//           throw err;
-//         }
-//         console.log('employee added')
-//         console.table(result);
-//         todoList();
-//       });
-//     });

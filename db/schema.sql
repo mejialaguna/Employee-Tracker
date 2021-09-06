@@ -13,7 +13,7 @@ create table roles (
 id integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
 rol_title varchar(30),
 salary decimal,
-dep_id integer,
+dep_id integer ,
 FOREIGN KEY (dep_id) REFERENCES department(id) ON DELETE CASCADE
 );
 
