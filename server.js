@@ -11,7 +11,7 @@ function todoList() {
         choices: [
           "add employee",
           "view all employees",
-          // "view all employees by manager",
+          "view all employees by manager",
           "add an department",
           "view all departments",
           "view all employee by department",
@@ -29,7 +29,7 @@ function todoList() {
       } else if (answer.todo === "view all employees") {
         allEmployees();
       } else if (answer.todo === "view all employees by manager") {
-        displayEmByManager()
+        EmByManager()
       } else if (answer.todo === "add an department")  {
         addDepartment()
       } else if (answer.todo === "view all departments") {
@@ -218,7 +218,7 @@ function department() {
       .prompt([
         {
           type: "list",
-          message: "choose one of the choices",
+          message: "choose one of department",
           name: "dep_name",
           choices: departmentsChoices,
         },
@@ -271,7 +271,8 @@ function deleteDepartment() {
             throw err;
           }
           console.log("department deleted");
-          console.table(result);
+          
+          showDepartments()
           todoList();
         });
       });
@@ -421,6 +422,42 @@ function allRoles() {
     todoList();
   });
 }
+
+
+function EmByManager() {
+  let sql = `SELECT * FROM employee WHERE manager_id IS NULL`
+
+  connection.query(sql, function (err, manager) {
+    if (err) throw err;
+    const managers = manager.map(function (element) {
+      return {
+        name: `${element.first_name} ${element.last_name}`,
+        value: element.id
+      }
+    });
+    inquirer.prompt([{
+      type: "list",
+      name: "managerName",
+      message: "Please select manager to view employees",
+      choices: managers
+    }])
+      .then((answer) => {
+        
+        let sql = `SELECT employee.id, employee.first_name, employee.last_name, employee.role_id AS role, CONCAT(manager.first_name, ' ', manager.last_name) as manager, department.dep_name AS department FROM employee
+        LEFT JOIN roles on employee.role_id = roles.id
+        LEFT JOIN department on department.id = roles.dep_id
+        LEFT JOIN employee manager on employee.manager_id = manager.id
+        WHERE employee.manager_id = ${answer.managerName}`
+        connection.query(sql,  (err, result) => {
+          if (err){
+            throw err;
+          } 
+          console.table(result);
+          todoList()
+        })
+      })
+  })
+};
 
 
 todoList();
