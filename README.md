@@ -4,7 +4,9 @@
   
   <div align="center">
   
-  <h1 align="center">E_T_P Employee_Tracker_program</h1>
+  <h1>  Employee_Tracker_Aplication <br> </h1>
+  <h2 >E_T_A</h2>
+
   <br/>
   <a href="#about"><strong>Explore the screenshots »</strong></a>
   <br/>
@@ -54,7 +56,12 @@
   
   <img src="img/img_1.png"/> 
   <img src="img/img_2.png"/>
-  <img src="img/gifvideo.gif">
+  <img src="img/gif.gif">
+
+  <br>
+  <br>
+
+  please to watch the A walkthrough video demonstrating the functionality of the application. <a href= "https://drive.google.com/file/d/11GBPvn26WUECgwKdOdPAMBkYycIm1SlL/view">click here </a>
   
   </details>
   
@@ -126,7 +133,7 @@
 
   
   
-  <a href="https://github.com/mejialaguna/teamProfileGenerator/issues/1">For any Question please click here...</a>
+  <a href="https://github.com/mejialaguna/Employee-Tracker/issues/1">For any Question and to point out a bug please click here...</a>
   
 
 ## Acceptance Criteria

@@ -57,13 +57,13 @@ function todoList() {
 function addEmployee() {
   connection.query(`select * from roles`, (err, roles) => {
     if (err) {
-      throw error;
+      throw new Error(err);
     }
 
     let rol_title = roles.map((role) => {
       return {
         name: role.rol_title,
-        value: role.id,
+        value: role.dep_id,
       };
     });
 
@@ -109,26 +109,28 @@ function addEmployee() {
       ])
       .then((answer) => {
         const sql = `insert into employee (first_name , last_name , role_id , manager_id) 
-        values ('${answer.first_Name}' , '${answer.last_Name}' , '${answer.role_Id}' , '${answer.manager_id}' )`;
-        connection.query(sql, (err, result) => {
+        values (?, ? , ? , ? )`;
+        const params = [answer.first_Name , answer.last_Name , answer.role_Id, answer.manager_id]
+        connection.query(sql , params , (err, result) => {
           if (err) {
-            throw error;
-          }
-          allEmployees();
-          console.log(result);
+            throw new Error(err);
+          }          
+          console.table(result)
+          console.log("successfully added")
           todoList();
         });
+        
       });
-  });
+    });
 }
 // TO GET ALL EMPLOYEES
 function allEmployees() {
-  const sql = `select concat(first_name, " ", last_name) as Emp_name , dep_id, dep_name as department , salary , manager_id
+  const sql = `select concat(first_name, " ", last_name) as Emp_name , dep_id, dep_name as department , rol_title, salary , manager_id
    from roles
    JOIN department
-   on roles.dep_id = department.id
+   on roles.dep_id = department.id 
    join employee
-   on employee.role_id = roles.id;
+   on employee.role_id = roles.id ;
 `;
   connection.query(sql, (err, rows) => {
     if (err) {
@@ -180,8 +182,9 @@ function addDepartment() {
           if (err) {
             throw new Error(err);
           }
-          // console.log(result);
-          showDepartments();
+          console.table(result);
+          console.log("department added to the roaster")
+          todoList()
         });
       });
     });
@@ -206,7 +209,7 @@ function department() {
 
     let departmentsChoices = department.map((departments) => {
       return {
-        name: `${departments.dep_name}`,
+        name: departments.dep_name,
       };
     });
 
@@ -231,6 +234,7 @@ function department() {
             throw new Error(err);
           }
           console.table(result);
+          console.log("successfully loaded")
           todoList();
         });
       });
@@ -267,9 +271,8 @@ function deleteDepartment() {
           if (err) {
             throw new Error(err);
           }
-          console.log("department deleted");
-
-          showDepartments();
+          console.log("department deleted");   
+          console.table(result)
           todoList();
         });
       });
@@ -307,8 +310,7 @@ function deleteEmployee() {
             throw new Error(err);
           }
           console.log("Employee deleted");
-          console.table(result);
-          allEmployees();
+          console.table(result);          
           todoList();
         });
       });
@@ -341,9 +343,8 @@ function deleteRole() {
           if (err) {
             throw new Error(err);
           }
-          console.log("Role delete");
-          allEmployees();
-
+          console.log("Role delete");          
+          console.table(result);
           todoList();
         });
       });
@@ -394,7 +395,6 @@ function updateRole() {
               throw new Error(err);
             }
             console.table(row);
-            allEmployees();
             todoList();
           });
         });
