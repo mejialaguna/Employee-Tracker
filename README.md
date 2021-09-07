@@ -19,7 +19,7 @@
   <div align="center">
   <br/>
   
-  [![code with hearth by GITHUB_USERNAME](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-GITHUB_mejialaguna-ff1414.svg?style=flat-square)](https://github.com/mejialaguna/Employee-Tracker.git)[![License:](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+  [![code with hearth by GITHUB_USERNAME](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-GITHUB_mejialaguna-ff1414.svg?style=flat-square)](https://github.com/mejialaguna/Employee_Tracker_Aplication)[![License:](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
     
   </div>
   
@@ -93,7 +93,7 @@
    1. Install node js <a href="https://nodejs.org/en/"> [ HERE ]</a>. 
    2. Install Inquirer Dependency <a href="https://www.npmjs.com/package/inquirer">[ Read Documentation here ]</a>.
    2. Install Node MySQL 2 Dependency <a href="https://www.npmjs.com/package/mysql2">[ Read Documentation here ]</a>.
-   3. Clone this https://github.com/mejialaguna/Employee-Tracker.git .
+   3. Clone this https://github.com/mejialaguna/Employee_Tracker_Aplication/issues/1.
    4. Run node server inside your terminal. 
    5. Answer all the question and start building you company.
    7. Enjoy.
@@ -133,7 +133,7 @@
 
   
   
-  <a href="https://github.com/mejialaguna/Employee-Tracker/issues/1">For any Question and to point out a bug please click here...</a>
+  <a href="https://github.com/mejialaguna/Employee_Tracker_Aplication/issues/1">For any Question and to point out a bug please click here...</a>
   
 
 ## Acceptance Criteria
