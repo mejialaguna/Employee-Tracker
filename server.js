@@ -110,14 +110,7 @@ function addEmployee() {
         },
       ])
       .then((answer) => {
-        const sql = `insert into employee (first_name , last_name , role_id , manager_id) 
-        values (?, ? , ? , ? )`;
-        const params = [
-          answer.first_Name,
-          answer.last_Name,
-          answer.role_Id,
-          answer.manager_id,
-        ];
+            
         connection.query(sql, params, (err, result) => {
           if (err) {
             throw new Error(err);
@@ -131,12 +124,10 @@ function addEmployee() {
 }
 // TO GET ALL EMPLOYEES
 function allEmployees() {
-  const sql = `select concat(first_name, " ", last_name) as Emp_name , dep_id, dep_name as department , rol_title, salary , manager_id
-   from roles
-   JOIN department
-   on roles.dep_id = department.id 
-   join employee
-   on employee.role_id = roles.id ;
+  const sql = ` SELECT employee.id, employee.first_name, employee.last_name, employee.role_id AS role, CONCAT(manager.first_name, ' ', manager.last_name) as manager, department.dep_name AS department FROM employee
+  LEFT JOIN roles on employee.role_id = roles.id
+  LEFT JOIN department on department.id = roles.dep_id
+  LEFT JOIN employee manager on employee.manager_id = manager.id ;
 `;
   connection.query(sql, (err, rows) => {
     if (err) {
