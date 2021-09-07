@@ -1,5 +1,4 @@
 var inquirer = require("inquirer");
-const { addListener } = require("./db/connection");
 const connection = require("./db/connection");
 
 function todoList() {
