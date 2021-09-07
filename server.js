@@ -12,13 +12,12 @@ function todoList() {
         choices: [
           "add employee",
           "view all employees",
-          "view all employees by manager",
+          // "view all employees by manager",
           "add an department",
           "view all departments",
           "view all employee by department",
           "view all roles",
           "update role",
-          "update employee manager",
           "delete employee",
           "delete department",
           "delete role",
@@ -30,6 +29,8 @@ function todoList() {
         addEmployee();
       } else if (answer.todo === "view all employees") {
         allEmployees();
+      } else if (answer.todo === "view all employees by manager") {
+        displayEmByManager()
       } else if (answer.todo === "add an department")  {
         addDepartment()
       } else if (answer.todo === "view all departments") {
@@ -116,8 +117,8 @@ function addEmployee() {
           if (err) {
             throw error;
           }
-          console.log(result);
           allEmployees();
+          console.log(result);
           todoList();
         });
       });
@@ -173,7 +174,7 @@ function addDepartment(){
         if(err){
           throw error
         }
-        console.table(result)
+        // console.table(result)
         showDepartments()
         todoList()
       })
@@ -190,6 +191,7 @@ function addDepartment(){
       })
     })
 }
+// SHOW ALL department Function
 function showDepartments() {
   const sql = ` select * from department`;
   connection.query(sql, (err, result) => {
@@ -200,7 +202,6 @@ function showDepartments() {
     todoList();
   });
 }
-
 // to get EMPLOYEE BY department
 function department() {
   connection.query(`SELECT * FROM department`, (err, department) => {
@@ -344,7 +345,8 @@ function deleteRole() {
             throw err;
           }
           console.log("Role delete");
-          console.table(result);
+          allEmployees()
+
           todoList();
         });
       });
@@ -393,8 +395,7 @@ function updateRole() {
           connection.query(sql, (err, row) => {
             if (err) {
               throw err;
-            }
-            console.log("role updated");
+            }            
             console.table(row);
             allEmployees();
             todoList();
@@ -405,10 +406,13 @@ function updateRole() {
 }
 
 function allRoles() {
-  const sql = `select roles.rol_title as JOB_Title , roles.id , department.dep_name as department , salary
+  const sql = `select roles.rol_title as JOB_Title , 
+  employee.role_id , department.dep_name as department , salary
  from roles
  join department
- on roles.dep_id = department.id`;
+ on roles.dep_id = department.id
+ join employee
+ on employee.role_id = roles.id`
 
   connection.query(sql, (err, result) => {
     if (err) {
@@ -418,5 +422,6 @@ function allRoles() {
     todoList();
   });
 }
+
 
 todoList();

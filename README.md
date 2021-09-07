@@ -1,16 +1,133 @@
-# 12 SQL: Employee Tracker
+ 
+  <br/>
+  <br/>
+  
+  <div align="center">
+  
+  <h1 align="center">E_T_P Employee_Tracker_program</h1>
+  <br/>
+  <a href="#about"><strong>Explore the screenshots »</strong></a>
+  <br/>
+  <br/>
+  
+  </div>
+  
+  
+  
+  <div align="center">
+  <br/>
+  
+  [![code with hearth by GITHUB_USERNAME](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-GITHUB_mejialaguna-ff1414.svg?style=flat-square)](https://github.com/mejialaguna/Employee-Tracker.git)[![License:](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+    
+  </div>
+  
+  <br/>
+  
+  <details open="open">
+  <summary>Table of Contents</summary>
+  
+  - [About](#about)
+  - [Built With](#built-with)
+  - [Installation](#installation)
+  - [Authors & contributors](#authors--contributors)
+  - [Acknowledgements](#Acknowledgements)
+  - [License](#License) 
+  
+  </details>  
+  
+  <br/>
+  
+  ## About
+  ---
 
-Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. These interfaces are known as Content Management Systems (CMS). Your challenge this week is to build a command-line application to manage a company's database of employees using Node.js, Inquirer, and MySQL.
+  <br/>
 
-Because this application won’t be deployed, you’ll also need to provide a link to a walkthrough video that demonstrates its functionality and all of the acceptance criteria below being met. You’ll need to submit a link to the video and add it to the README of your project.
+  This application is designed to add , update and remove employees ,departments and assign roles to all employees inside of a company . 
+  
+  <br/>
+  <br/>
 
-## User Story
+  <details open="open">
+  <summary>Usage Screenshots and Demo</summary>
 
-```md
-AS A business owner
-I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
-```
+  <br/> 
+  
+  <img src="img/img_1.png"/> 
+  <img src="img/img_2.png"/>
+  <img src="img/gifvideo.gif">
+  
+  </details>
+  
+  <br/>
+  <br/>
+  
+  
+  ## Built With
+  ---
+
+  <br/>
+
+ 
+ >*  <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API">JavaScript</a>
+ >*  <a href="https://nodejs.org/en/">Node</a>
+ >*  <a href="https://www.w3schools.com/js/js_es6.asp">ES6</a>
+ >*  <a href="https://www.npmjs.com/package/inquirer">INQUIRER</a>
+ >*  <a href="https://www.npmjs.com/package/mysql2">Node MySQL 2</a>
+  
+  
+  <br/>
+  <br/>
+  
+  ##  Installation
+  ---
+
+  <br/>
+  
+   1. Install node js <a href="https://nodejs.org/en/"> [ HERE ]</a>. 
+   2. Install Inquirer Dependency <a href="https://www.npmjs.com/package/inquirer">[ Read Documentation here ]</a>.
+   2. Install Node MySQL 2 Dependency <a href="https://www.npmjs.com/package/mysql2">[ Read Documentation here ]</a>.
+   3. Clone this https://github.com/mejialaguna/Employee-Tracker.git .
+   4. Run node server inside your terminal. 
+   5. Answer all the question and start building you company.
+   7. Enjoy.
+
+  <br/>
+  <br/>
+  
+  
+  ##  Authors & contributors
+  ---
+
+  <br/>
+   
+  Jose Luis Mejia Laguna.
+  
+  <br/>
+  <br/>
+  
+  ## Acknowledgements
+  ---
+
+  <br/>
+
+  First off , thanks for taking the time to check out my app! , contribution are what make this open-source community such an amazing place to learn , inspire and create. Any contribution you make will benefit everyone interested in using the app and are very appriciated.
+  ---
+
+  <br/>
+  <br/>
+  
+  ## License
+  ---
+  <br/>
+
+  [![License:](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+
+  <br/>
+
+  
+  
+  <a href="https://github.com/mejialaguna/teamProfileGenerator/issues/1">For any Question please click here...</a>
+  
 
 ## Acceptance Criteria
 
@@ -34,78 +151,3 @@ WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
 ```
 
-## Mock-Up
-
-The following animation shows an example of the application being used from the command line:
-
-![Command Line demo](./Assets/12-sql-homework-demo-01.gif)
-
-
-## Getting Started
-
-You’ll need to use the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to your MySQL database and perform queries, the [Inquirer package](https://www.npmjs.com/package/inquirer) to interact with the user via the command-line, and the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
-
-**Important**: You will be committing a file that contains your database credentials. Make sure your MySQL password is not used for any other personal accounts, because it will be visible on GitHub. In upcoming lessons, you will learn how to better secure this password, or you can start researching npm packages now that could help you.
-
-You might also want to make your queries asynchronous. MySQL2 exposes a `.promise()` function on Connections to "upgrade" an existing non-promise connection to use promises. Look into [MySQL2's documentation](https://www.npmjs.com/package/mysql2) in order to make your queries asynchronous.
-
-Design the following database schema containing three tables:
-
-![Database Demo](./Assets/12-sql-homework-demo-02.png)
-
-* **department:**
-
-    * `id` - INT PRIMARY KEY
-
-    * `name` - VARCHAR(30) to hold department name
-
-* **role:**
-
-    * `id` - INT PRIMARY KEY
-
-    * `title` - VARCHAR(30) to hold role title
-
-    * `salary` - DECIMAL to hold role salary
-
-    * `department_id` - INT to hold reference to department role belongs to
-
-* **employee:**
-
-    * `id` - INT PRIMARY KEY
-
-    * `first_name` - VARCHAR(30) to hold employee first name
-
-    * `last_name` - VARCHAR(30) to hold employee last name
-
-    * `role_id` - INT to hold reference to employee role
-
-    * `manager_id` - INT to hold reference to another employee that is manager of the current employee. This field may be null if the employee has no manager
-
-You may want to use a separate file containing functions for performing specific SQL queries you'll need to use. A constructor function or Class could be helpful for organizing these. You may also want to include a `seeds.sql` file to pre-populate your database. This will make the development of individual features much easier.
-
-
-## Bonus
-
-See if you can add some additional functionality to your application, such as the ability to:
-
-* Update employee managers
-
-* View employees by manager
-
-* View employees by department
-
-* Delete departments, roles, and employees
-
-* View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* A walkthrough video demonstrating the functionality of the application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
-
-- - -
-© 2021 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
