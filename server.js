@@ -1,6 +1,8 @@
 var inquirer = require("inquirer");
 const connection = require("./db/connection");
 
+
+// main function
 function todoList() {
   inquirer
     .prompt([
@@ -110,18 +112,22 @@ function addEmployee() {
       .then((answer) => {
         const sql = `insert into employee (first_name , last_name , role_id , manager_id) 
         values (?, ? , ? , ? )`;
-        const params = [answer.first_Name , answer.last_Name , answer.role_Id, answer.manager_id]
-        connection.query(sql , params , (err, result) => {
+        const params = [
+          answer.first_Name,
+          answer.last_Name,
+          answer.role_Id,
+          answer.manager_id,
+        ];
+        connection.query(sql, params, (err, result) => {
           if (err) {
             throw new Error(err);
-          }          
-          console.table(result)
-          console.log("successfully added")
+          }
+          console.table(result);
+          console.log("successfully added");
           todoList();
         });
-        
       });
-    });
+  });
 }
 // TO GET ALL EMPLOYEES
 function allEmployees() {
@@ -176,15 +182,15 @@ function addDepartment() {
 
         const sql = `insert into roles ( rol_title , salary , dep_id) 
           values( ? ,? ,?)`;
-        const params = [answer.new_role , answer.newSalary , answer.dep_id];
+        const params = [answer.new_role, answer.newSalary, answer.dep_id];
 
         connection.query(sql, params, (err, result) => {
           if (err) {
             throw new Error(err);
           }
           console.table(result);
-          console.log("department added to the roaster")
-          todoList()
+          console.log("department added to the roaster");
+          todoList();
         });
       });
     });
@@ -200,7 +206,7 @@ function showDepartments() {
     todoList();
   });
 }
-// to get EMPLOYEE BY department
+// to get EMPLOYEE BY department using join and where
 function department() {
   connection.query(`SELECT * FROM department`, (err, department) => {
     if (err) {
@@ -234,7 +240,7 @@ function department() {
             throw new Error(err);
           }
           console.table(result);
-          console.log("successfully loaded")
+          console.log("successfully loaded");
           todoList();
         });
       });
@@ -250,7 +256,7 @@ function deleteDepartment() {
     let departmentChoices = department.map((departments) => {
       return {
         name: departments.dep_name,
-        value: departments.id
+        value: departments.id,
       };
     });
 
@@ -271,8 +277,8 @@ function deleteDepartment() {
           if (err) {
             throw new Error(err);
           }
-          console.log("department deleted");   
-          console.table(result)
+          console.log("department deleted");
+          console.table(result);
           todoList();
         });
       });
@@ -310,7 +316,7 @@ function deleteEmployee() {
             throw new Error(err);
           }
           console.log("Employee deleted");
-          console.table(result);          
+          console.table(result);
           todoList();
         });
       });
@@ -343,13 +349,14 @@ function deleteRole() {
           if (err) {
             throw new Error(err);
           }
-          console.log("Role delete");          
+          console.log("Role delete");
           console.table(result);
           todoList();
         });
       });
   });
 }
+
 function updateRole() {
   connection.query(`SELECT * FROM employee`, (err, employees) => {
     if (err) {
@@ -401,7 +408,7 @@ function updateRole() {
     });
   });
 }
-
+// gets all roles 
 function allRoles() {
   const sql = `select roles.rol_title as JOB_Title , 
   employee.role_id , department.dep_name as department , salary
@@ -419,7 +426,7 @@ function allRoles() {
     todoList();
   });
 }
-
+// employee by manager
 function EmByManager() {
   let sql = `SELECT * FROM employee WHERE manager_id IS NULL`;
 
