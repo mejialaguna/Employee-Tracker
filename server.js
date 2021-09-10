@@ -110,8 +110,9 @@ function addEmployee() {
         },
       ])
       .then((answer) => {
-            
-        connection.query(sql, params, (err, result) => {
+        const sql = `insert into employee (first_name , last_name , role_id , manager_id) 
+        values ('${answer.first_Name}' , '${answer.last_Name}' , '${answer.role_Id}' , '${answer.manager_id}' )`; 
+        connection.query(sql,(err, result) => {
           if (err) {
             throw new Error(err);
           }
